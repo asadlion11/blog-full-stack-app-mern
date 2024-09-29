@@ -1,36 +1,37 @@
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
 } from "@/components/ui/card"
+import { useUser } from "@/hooks/useUser"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { useEffect, useState } from "react"
-import axios from "axios"
-import toast from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
-import { useUser } from "@/hooks/useUser"
 
 
-const Register = () => {
+const Login = () => {
     const [formData, setFormData] = useState({
-        username: "",
         email: "",
         password: ""
     })
     
-    const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
-    const navigate = useNavigate()
-
-  const { user } = useUser()
+  const { login, user } = useUser()
 
   useEffect(() => {
     if(user) navigate('/')
   },[user])
+
+    const [loading, setLoading] = useState(false)
+
+    
     
     const handleInputChange = (event) => {
         // console.log(event.target.value)
@@ -45,15 +46,17 @@ const Register = () => {
         event.preventDefault()
 
         try {
-            const {data} = await axios.post('/api/user/register-user', formData)
-            // console.log(data)
-            toast.success("Sucesfully registered")
+            const { data } = await axios.post('/api/user/login', formData)
+            console.log(data)
+            toast.success("Sucesfully login")
             setLoading(false)
-            navigate('/login')
+            login(data, data.expiresIn)
+            navigate('/')
             
         } catch (err) {
             setLoading(false)
             toast.error(err.response.data)
+            console.log(err)
         }
     }
 
@@ -61,16 +64,12 @@ const Register = () => {
     <div className='w-full'>
     <Card>
   <CardHeader>
-    <CardTitle>Register With Your Info</CardTitle>
-    <CardDescription>Register With Your Info</CardDescription>
+    <CardTitle>Login With Your Info</CardTitle>
+    <CardDescription>Login With Your Info</CardDescription>
   </CardHeader>
   <CardContent>
   <form onSubmit = {handleSubmit}>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Enter Your Username" required onChange = {handleInputChange}/>
-            </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
               <Input id="email" placeholder="Enter Your Email" required onChange = {handleInputChange}/>
@@ -79,7 +78,7 @@ const Register = () => {
               <Label htmlFor="passwod">Password</Label>
               <Input id="password" placeholder="Enter Your Password" required type = "password" onChange = {handleInputChange}/>
             </div>
-            <Button>{loading ? 'Registering' : "Register"}</Button>
+            <Button>{loading ? 'Loading' : "Login"}</Button>
           </div>
         </form>
   </CardContent>
@@ -89,4 +88,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Login

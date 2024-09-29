@@ -4,9 +4,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast';
 import App from './App.jsx'
 import './index.css'
-import Signup from './pages/Signup.jsx'
-import Login from './pages/Login.jsx'
+import RegisterPage from './pages/RegisterPage.jsx'
+import LoginPage from './pages/LoginPage.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import { UserProvider } from './hooks/useUser.jsx';
 
 const router = createBrowserRouter([
   {
@@ -14,12 +15,12 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/signup",
-        element: <Signup /> 
+        path: "/register-user",
+        element: <RegisterPage /> 
       },
       {
         path: "/login",
-        element: <Login />
+        element: <LoginPage />
       },
       {
         path: "/dashboard",
@@ -31,7 +32,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <UserProvider>
     <Toaster />
     <RouterProvider router={router} />
+    </UserProvider>
   </StrictMode>,
 )

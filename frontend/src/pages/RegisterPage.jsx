@@ -1,8 +1,6 @@
 import Register from '@/components/Register'
-import { Button } from '@/components/ui/button'
-import React from 'react'
 
-const Signup = () => {
+const RegisterPage = () => {
   return (
     <div className='max-w-lg mx-auto h-screen flex items-center justify-center'>
       <Register />
@@ -10,4 +8,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default RegisterPage
